@@ -5,7 +5,6 @@
 @using Vizsgafeladat.services
 @inject NavigationManager Navigation
 @inject UserService UserService
-@inject UserStateService UserState
 
 <PageTitle>Bejelentkezés / Regisztráció</PageTitle>
 
@@ -22,7 +21,7 @@
     @if (loginHiba)
     {
         <p class="text-danger">Hibás email vagy jelszó.</p>
-        <button class="custom-btn mt-2" @onclick="()=> regisztraciosMod = true">Regisztráció</button>
+        <button class="custom-btn mt-2" @onclick="() => regisztraciosMod = true">Regisztráció</button>
     }
 }
 
@@ -50,19 +49,17 @@
         if (user != null)
         {
             var permittedPages = await UserService.GetPermittedPages(user.Id);
-            CurrentUser currentUser = new();
-            currentUser.Id = user.Id;
-            currentUser.Name = user.Name;
-            currentUser.Email = user.Email;
-            currentUser.PermittedPages = permittedPages;
 
-            UserState.SetUser(new CurrentUser
+            UserSession.CurrentUser = new CurrentUser
                 {
                     Id = user.Id,
-                    Email = user.Email,
                     Name = user.Name,
+                    Email = user.Email,
                     PermittedPages = permittedPages
-                });
+                };
+
+            // Itt egy pici várakozás, hogy a layout biztosan felfrissüljön
+            await Task.Delay(100);
 
             sikeresBelepes = true;
             Navigation.NavigateTo("/Rendeles");
@@ -81,16 +78,17 @@
             await UserService.GrantAccessToPage(newUser.Id, "/Rendeles");
 
             var permittedPages = await UserService.GetPermittedPages(newUser.Id);
-            UserState.SetUser(new CurrentUser
+
+            UserSession.CurrentUser = new CurrentUser
                 {
                     Id = newUser.Id,
-                    Email = newUser.Email,
                     Name = newUser.Name,
+                    Email = newUser.Email,
                     PermittedPages = permittedPages
-                });
+                };
 
             sikeresBelepes = true;
-            Navigation.NavigateTo("/");
+            Navigation.NavigateTo("/Rendeles");
         }
     }
 }

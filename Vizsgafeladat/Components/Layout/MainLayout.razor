@@ -1,21 +1,65 @@
-﻿@inherits LayoutComponentBase
+﻿@inject NavigationManager navigate
+@using Vizsgafeladat.VIEWMODEL
+@inherits LayoutComponentBase
 
 <PageTitle>Cukorfelhő Cukrászda</PageTitle>
 
-<div class="navbar navbar-expand-lg">
-    <a class="navbar-brand" href="/">Cukorfelhő Cukrászda</a>
+<div class="navbar navbar-expand-lg fixed-top bg-dark">
+    <a class="navbar-brand ms-4 text-white" href="/">Cukorfelhő Cukrászda</a>
     <div class="d-flex w-100 justify-content-between align-items-center">
         <ul class="navbar-nav mx-auto">
-            <li class="nav-item"><a class="nav-link" href="/">Kezdőlap</a></li>
-            <li class="nav-item"><a class="nav-link" href="#menu">Kínálatunk</a></li>
-            <li class="nav-item"><a class="nav-link" href="#delivery">Online rendelés</a></li>
-            <li class="nav-item"><a class="nav-link" href="#contact">Kapcsolat</a></li>
-            <li class="nav-item"><a class="nav-link" href="/admin">Admin</a></li>
+            <li class="nav-item">
+                <NavLink class="nav-link text-info" href="/">Kezdőlap</NavLink>
+            </li>
+            <li class="nav-item">
+                <NavLink class="nav-link text-info" href="#menu">Kínálatunk</NavLink>
+            </li>
+            <li class="nav-item">
+                @if (UserSession.CurrentUser != null)
+                {
+                    <NavLink class="nav-link text-info" href="/Rendeles">Online rendelés</NavLink>
+                }
+                else
+                {
+                    <NavLink class="nav-link text-info" href="/RegistrationAndLogin">Online rendelés</NavLink>
+                }
+            </li>
+            <li class="nav-item">
+                <NavLink class="nav-link text-info" href="#contact">Kapcsolat</NavLink>
+            </li>
+            <li class="nav-item">
+                <NavLink class="nav-link text-info" href="/admin">Admin</NavLink>
+            </li>
         </ul>
-        <a href="RegisterAndLogin" class="custom-btn me-3">Regisztráció / Bejelentkezés</a>
+
+        @if (UserSession.CurrentUser == null)
+        {
+            <a href="/RegistrationAndLogin" class="custom-btn me-3">Regisztráció / Bejelentkezés</a>
+        }
+        else
+        {
+            <div class="dropdown me-3">
+                <a class="btn btn-dark dropdown-toggle" href="#" role="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    👤 @UserSession.CurrentUser.Name
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                    <li><a class="dropdown-item" href="/Profile">Profilom</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><button class="dropdown-item" @onclick="Logout">Kijelentkezés</button></li>
+                </ul>
+            </div>
+        }
     </div>
 </div>
 
-<div class="main-content">
+<div class="main-content pt-5 mt-5 px-3">
     @Body
 </div>
+
+@code {
+    private void Logout()
+    {
+        UserSession.CurrentUser = null;
+        navigate.NavigateTo("/");
+    }
+}

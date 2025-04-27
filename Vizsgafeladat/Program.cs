@@ -17,8 +17,8 @@ builder.Services.AddScoped<ProductServices>();
 builder.Services.AddScoped<CartService>();
 builder.Services.AddScoped<OrderService>();
 builder.Services.AddScoped<UserService>();
-builder.Services.AddScoped<UserStateService>();
-builder.Services.AddSingleton<AuthStateService>();  // A felhasználó állapotát jelzi
+//builder.Services.AddScoped<UserStateService>();
+//builder.Services.AddSingleton<AuthStateService>();  // A felhasználó állapotát jelzi
 
 
 var app = builder.Build();

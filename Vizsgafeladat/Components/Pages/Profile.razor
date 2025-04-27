@@ -1,0 +1,17 @@
+﻿@page "/profile"
+@using Vizsgafeladat.services
+@inject UserStateService UserStateService
+
+<h3>Profilom</h3>
+
+@if (UserStateService.CurrentUser == null)
+{
+    <p>Nem vagy bejelentkezve.</p>
+}
+else
+{
+    <div class="card p-3">
+        <p><strong>Név:</strong> @UserStateService.CurrentUser.Name</p>
+        <p><strong>Email:</strong> @UserStateService.CurrentUser.Email</p>
+    </div>
+}
