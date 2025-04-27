@@ -1,0 +1,94 @@
+﻿@page "/"
+@rendermode InteractiveServer
+@using Vizsgafeladat.MODEL
+@using Vizsgafeladat.services
+@inject ProductServices productServices
+
+<PageTitle>Kezdőlap</PageTitle>
+
+<div id="home" class="container text-center my-5">
+    <h1 style="color:cornsilk;">Üdvözöljük a Cukorfelhő Cukrászdában!</h1>
+    <p>Finomságok minden nap!</p>
+    <p>A mi cukrászdánk a legjobb hely, ahol ínycsiklandó süteményeket, tortákat és friss kávét élvezhet...</p>
+</div>
+
+<hr class="divider" />
+
+<div id="menu" class="container my-5">
+    <h2 class="text-center">Kínálatunk</h2>
+    @if (products != null)
+    {
+        <div class="row">
+            @foreach (var (name, id, image, link) in new[] {
+        ("Torta", 4, "img/tortarajz.jfif", "Tortak"),
+        ("Sütemény", 3, "img/placeholder_cookie.jpg", "Sutemenyek"),
+        ("Fagylalt", 2, "img/placeholder_icecream.jpg", "Fagylaltok"),
+        ("Italok", 1, "img/placeholder_coffee.jpg", "Kavek")
+        })
+            {
+                var items = products.Where(p => p.category_id == id).ToList();
+                <div class="col-md-6 menu-item">
+                    <div class="menu-box">
+                        <h3>@name</h3>
+                        <img src="@image" alt="@name" />
+                        <p>Válogasson kedvére @name.ToLower() kínálatunkból!</p>
+                        @if (items.Any())
+                        {
+                            <p>Választék: @items.Count() féle</p>
+                            <p>Árak: @((int)items.Min(p => p.price)) Ft-tól @((int)items.Max(p => p.price)) Ft-ig</p>
+                        }
+                        <a href="@link" class="custom-btn">Mutass többet...</a>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <p>Betöltés folyamatban...</p>
+    }
+</div>
+
+<hr class="divider" />
+
+<div id="delivery" class="container text-center my-5">
+    <h2 class="text-center">Online rendelés</h2>
+    @* <a href="Rendeles" class="custom-btn">Online rendelés</a> *@
+    <MegrendelesKomponens></MegrendelesKomponens>
+</div>
+
+<hr class="divider" />
+
+<div id="contact" class="container my-5">
+    <h2 class="text-center">Kapcsolat</h2>
+    <p class="text-center">Telefon: +36 1 234 5678<br />Email: info@cukraszda.hu</p>
+    <div class="row align-items-center">
+        <div class="col-md-6 text-center">
+            <p>Cukorfelhő Cukrászda<br />1234 Budapest, Édes utca 5.<br />Nyitvatartás: H-V 9:00–20:00</p>
+        </div>
+        <div class="col-md-6">
+            <img src="img/placeholder_location.jpg" alt="Helyszín kép" class="img-fluid location" />
+        </div>
+    </div>
+</div>
+
+<footer class="footer text-center py-3">
+    <p>&copy; 2025 Cukorfelhő Cukrászda.</p>
+    <button onclick="topFunction()" id="topBtn" class="btn btn-primary">Vissza az oldal tetejére</button>
+</footer>
+
+<script>
+    function topFunction() {
+        document.body.scrollTop = 0;
+        document.documentElement.scrollTop = 0;
+    }
+</script>
+
+@code {
+    private List<products> products;
+
+    protected override async Task OnInitializedAsync()
+    {
+        products = await productServices.GetAllProducts();
+    }
+}

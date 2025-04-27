@@ -1,0 +1,15 @@
+﻿@inject AuthStateService Auth
+@inject NavigationManager Nav
+
+@if (Auth.IsLoggedIn)
+{
+    <button class="custom-btn" @onclick="Logout">Kijelentkezés</button>
+}
+
+@code {
+    void Logout()
+    {
+        Auth.SetUser(null);
+        Nav.NavigateTo("/");
+    }
+}

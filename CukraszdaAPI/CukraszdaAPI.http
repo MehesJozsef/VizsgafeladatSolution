@@ -1,0 +1,6 @@
+@CukraszdaAPI_HostAddress = http://localhost:5088
+
+GET {{CukraszdaAPI_HostAddress}}
+Accept: application/json
+
+###

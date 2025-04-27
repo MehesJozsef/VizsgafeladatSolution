@@ -1,0 +1,196 @@
+﻿@page "/Rendeles"
+@using Vizsgafeladat.MODEL;
+@using Vizsgafeladat.services;
+@inject ProductServices productServices
+@* @inject CartService cartService *@
+
+<style>
+    .menu-item {
+        display: flex;
+        justify-content: center;
+    }
+
+    .menu-box {
+        width: 100%;
+        max-width: 500px;
+    }
+
+    body {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+    }
+
+    .container {
+        flex: 1;
+    }
+
+	h2 {
+		text-align: center;
+	}
+</style>
+
+<nav class="navbar navbar-expand-lg">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <NavLink class="nav-link" href="/">Vissza a főoldalra</NavLink>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<div class="container text-center my-5">
+    <h1 style="color: cornsilk;">Torták</h1>
+
+    <hr class="divider">
+
+    <div class="row">
+            @if (products != null && products.Any())
+            {
+                @foreach (var torta in products.Where(p => p.category_id == 4))
+                {
+                    <div class="col-md-6 menu-item">
+                        <div class="menu-box">
+                            <h3>@torta.name</h3>
+                            <img src="@(string.IsNullOrEmpty(torta.image_url) ? "img/default.jpg" : torta.image_url)" alt="@torta.name">
+                            <p>@torta.description</p>
+                            <p class="price"><strong>Ár: @((int)torta.price) Ft</strong></p>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <p>Betöltés folyamatban...</p>
+            }
+    </div>
+</div>
+
+<div class="container text-center my-5">
+    <h1 style="color: cornsilk;">Sütemények</h1>
+
+    <hr class="divider">
+
+    <div class="row">
+        @if (products != null && products.Any())
+        {
+            @foreach (var sutemeny in products.Where(p => p.category_id == 3))
+            {
+                <div class="col-md-6 menu-item">
+                    <div class="menu-box">
+                        <h3>@sutemeny.name</h3>
+                        <img src="@(string.IsNullOrEmpty(sutemeny.image_url) ? "img/default.jpg" : sutemeny.image_url)" alt="@sutemeny.name">
+                        <p>@sutemeny.description</p>
+                        <p class="price"><strong>Ár: @((int)sutemeny.price) Ft</strong></p>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <p>Betöltés folyamatban...</p>
+        }
+    </div>
+</div>
+
+<div class="container text-center my-5">
+    <h1 style="color: cornsilk;">Fagylaltok</h1>
+
+    <hr class="divider">
+
+<div class="row">
+    @if (products != null && products.Any())
+    {
+        @foreach (var fagylalt in products.Where(p => p.category_id == 2))
+        {
+            <div class="col-md-6 menu-item">
+                <div class="menu-box">
+                    <h3>@fagylalt.name</h3>
+                    <img src="@(string.IsNullOrEmpty(fagylalt.image_url) ? "img/default.jpg" : fagylalt.image_url)" alt="@fagylalt.name">
+                    <p>@fagylalt.description</p>
+                    <p class="price"><strong>Ár: @((int)fagylalt.price) Ft</strong></p>
+                </div>
+            </div>
+        }
+    }
+    else
+    {
+        <p>Betöltés folyamatban...</p>
+    }
+    </div>
+</div>
+
+<div class="container text-center my-5">
+    <h1 style="color: cornsilk;">Italok</h1>
+
+    <hr class="divider">
+        <div class="row">
+        @if (products != null && products.Any())
+        {
+            @foreach (var ital in products.Where(p => p.category_id == 1))
+            {
+                <div class="col-md-6 menu-item">
+                    <div class="menu-box">
+                        <h3>@ital.name</h3>
+                        <img src="@(string.IsNullOrEmpty(ital.image_url) ? "img/presso.jpg" : ital.image_url)" alt="@ital.name">
+                        <p>@ital.description</p>
+                        <p class="price"><strong>Ár: @((int)ital.price) Ft</strong></p>
+                    </div>
+                </div>
+            }
+    }
+    else
+    {
+    <p>Betöltés folyamatban...</p>
+    }
+    </div>
+</div>
+
+
+<!--<button class="btn btn-primary" @onclick="() => cartService.AddToCart(torta, 1)">Kosárba</button>-->
+
+<div class="container my-5">
+    <h2>Kosarad</h2>
+    <ul>
+		@* @foreach (var item in cartService.Cart.Items)
+		{
+			<li>@item.Product.name - Mennyiség: @item.Quantity - Ár: @((int)(item.Product.price * item.Quantity)) Ft</li>
+		} *@
+    </ul>
+    <p><strong>Teljes összeg:@*  @((int)CartService.GetTotalPrice()) *@ Ft</strong></p>
+    <a href="RendelesAdatok" class="custom-btn">Tovább a rendelés befejezéséhez.</a>
+</div>
+
+
+    <section>
+        
+    </section>
+
+<footer class="footer text-center py-3">
+    <p>&copy; 2025 Cukorfelhő Cukrászda. </p>
+    <button onclick="topFunction()" id="topBtn" class="btn btn-primary">Vissza az oldal tetejére</button>
+</footer>
+
+<!--<div class="button-group">
+    <button class="custom-btn" @onclick="() => UpdateQuantity(product, 1)">Rendelés</button>
+    <input type="number" id="numberField" @bind="product.Quantity" min="0">
+</div>-->
+<script>
+    function topFunction() {
+        document.body.scrollTop = 0;
+        document.documentElement.scrollTop = 0;
+    }
+</script>
+
+@code {
+    private List<products> products;
+
+    protected override async Task OnInitializedAsync()
+    {
+        products = await productServices.GetAllProducts();
+    }
+}

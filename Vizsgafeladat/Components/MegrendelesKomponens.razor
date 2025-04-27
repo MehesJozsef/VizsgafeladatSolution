@@ -1,0 +1,46 @@
+﻿@rendermode InteractiveServer
+@using Vizsgafeladat.services
+@inject NavigationManager Navigation
+@inject UserStateService UserState
+
+<button class="custom-btn" @onclick="HandleOrderClick">Online rendelés</button>
+
+@ModalHiba
+
+@code {
+    private bool hibaTortent = false;
+    private RenderFragment? ModalHiba;
+
+    private async Task HandleOrderClick()
+    {
+        if (UserState.CurrentUser != null)
+        {
+            Navigation.NavigateTo("/Rendeles");
+        }
+        else
+        {
+            hibaTortent = true;
+            ModalHiba = builder =>
+            {
+                builder.OpenComponent(0, typeof(HibaKomponens));
+                builder.AddAttribute(1, "uzenet", "Online rendeléshez kérlek jelentkezz be!");
+                builder.AddAttribute(2, "OnZaras", EventCallback.Factory.Create(this, ZarHibauzenetet));
+                builder.AddAttribute(3, "OnBejelentkezes", EventCallback.Factory.Create(this, NavigalBejelentkezesre));
+                builder.CloseComponent();
+            };
+            StateHasChanged();
+        }
+    }
+
+    private void ZarHibauzenetet()
+    {
+        hibaTortent = false;
+        ModalHiba = null;
+        StateHasChanged();
+    }
+
+    private void NavigalBejelentkezesre()
+    {
+        Navigation.NavigateTo("/RegistrationAndLogin");
+    }
+}

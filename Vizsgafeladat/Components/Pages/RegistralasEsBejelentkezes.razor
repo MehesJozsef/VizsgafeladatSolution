@@ -1,0 +1,96 @@
+﻿@page "/RegistrationAndLogin"
+@rendermode InteractiveServer
+@using CommonLibrary.MODEL
+@using Vizsgafeladat.VIEWMODEL
+@using Vizsgafeladat.services
+@inject NavigationManager Navigation
+@inject UserService UserService
+@inject UserStateService UserState
+
+<PageTitle>Bejelentkezés / Regisztráció</PageTitle>
+
+<h3>Bejelentkezés</h3>
+
+@if (!sikeresBelepes)
+{
+    <EditForm Model="loginModel" OnValidSubmit="HandleLogin" FormName="loginForm">
+        <InputText @bind-Value="loginModel.Email" placeholder="Email" class="form-control mb-2" />
+        <InputText @bind-Value="loginModel.PasswordHash" placeholder="Jelszó" type="password" class="form-control mb-2" />
+        <button type="submit" class="custom-btn">Bejelentkezés</button>
+    </EditForm>
+
+    @if (loginHiba)
+    {
+        <p class="text-danger">Hibás email vagy jelszó.</p>
+        <button class="custom-btn mt-2" @onclick="()=> regisztraciosMod = true">Regisztráció</button>
+    }
+}
+
+@if (regisztraciosMod && !sikeresBelepes)
+{
+    <h4 class="mt-4">Regisztráció</h4>
+    <EditForm Model="regModel" OnValidSubmit="HandleRegister" FormName="registerForm">
+        <InputText @bind-Value="regModel.Email" placeholder="Email" class="form-control mb-2" />
+        <InputText @bind-Value="regModel.PasswordHash" placeholder="Jelszó" type="password" class="form-control mb-2" />
+        <InputText @bind-Value="regModel.Name" placeholder="Név" class="form-control mb-2" />
+        <button type="submit" class="custom-btn">Regisztráció és belépés</button>
+    </EditForm>
+}
+
+@code {
+    private User loginModel = new();
+    private User regModel = new();
+    private bool loginHiba = false;
+    private bool regisztraciosMod = false;
+    private bool sikeresBelepes = false;
+
+    private async Task HandleLogin()
+    {
+        var user = await UserService.LoginAsync(loginModel.Email, loginModel.PasswordHash);
+        if (user != null)
+        {
+            var permittedPages = await UserService.GetPermittedPages(user.Id);
+            CurrentUser currentUser = new();
+            currentUser.Id = user.Id;
+            currentUser.Name = user.Name;
+            currentUser.Email = user.Email;
+            currentUser.PermittedPages = permittedPages;
+
+            UserState.SetUser(new CurrentUser
+                {
+                    Id = user.Id,
+                    Email = user.Email,
+                    Name = user.Name,
+                    PermittedPages = permittedPages
+                });
+
+            sikeresBelepes = true;
+            Navigation.NavigateTo("/Rendeles");
+        }
+        else
+        {
+            loginHiba = true;
+        }
+    }
+
+    private async Task HandleRegister()
+    {
+        var newUser = await UserService.RegisterAsync(regModel);
+        if (newUser != null)
+        {
+            await UserService.GrantAccessToPage(newUser.Id, "/Rendeles");
+
+            var permittedPages = await UserService.GetPermittedPages(newUser.Id);
+            UserState.SetUser(new CurrentUser
+                {
+                    Id = newUser.Id,
+                    Email = newUser.Email,
+                    Name = newUser.Name,
+                    PermittedPages = permittedPages
+                });
+
+            sikeresBelepes = true;
+            Navigation.NavigateTo("/");
+        }
+    }
+}

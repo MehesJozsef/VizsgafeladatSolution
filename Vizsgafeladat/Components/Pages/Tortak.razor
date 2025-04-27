@@ -1,0 +1,90 @@
+﻿@page "/Tortak"
+@using Vizsgafeladat.MODEL;
+@using Vizsgafeladat.services;
+@inject ProductServices productServices
+
+<style>
+    .menu-item {
+        display: flex;
+        justify-content: center;
+    }
+
+    .menu-box {
+        width: 100%;
+        max-width: 500px;
+    }
+
+    body {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+    }
+
+    .container {
+        flex: 1;
+    }
+</style>
+
+<nav class="navbar navbar-expand-lg">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <NavLink class="nav-link" href="/">Vissza a főoldalra</NavLink>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<div class="container text-center my-5">
+    <h1 style="color: cornsilk;">Torták</h1>
+    <p>Üdvözöljük a Torták birodalmában, ahol az ízek tánca és a kreativitás találkozik!</p>
+
+    <hr class="divider">
+
+    <div class="row">
+        @if (products != null && products.Any())
+        {
+            @foreach (var torta in products.Where(p => p.category_id == 4))
+            {
+                <div class="col-md-6 menu-item">
+                    <div class="menu-box">
+                        <h3>@torta.name</h3>
+                        <img src="@(string.IsNullOrEmpty(torta.image_url) ? "img/tortarajz.jfif" : torta.image_url)" alt="@torta.name">
+                        <p>@torta.description</p>
+                        <p class="price"><strong>Ár: @((int)torta.price) Ft</strong></p>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <p>Betöltés folyamatban...</p>
+        }
+    </div>
+</div>
+
+<hr class="divider">
+
+<footer class="footer text-center py-3">
+    <p>&copy; 2025 Cukorfelhő Cukrászda. </p>
+    <button onclick="topFunction()" id="topBtn" class="btn btn-primary">Vissza az oldal tetejére</button>
+</footer>
+
+<script>
+    // Ha a felhasználó a gombra kattint, görgessük vissza az oldal tetejére
+    function topFunction() {
+        document.body.scrollTop = 0;
+        document.documentElement.scrollTop = 0;
+    }
+</script>
+@code {
+    private List<products> products;
+
+    protected override async Task OnInitializedAsync()
+    {
+        products = await productServices.GetAllProducts();
+    }
+}

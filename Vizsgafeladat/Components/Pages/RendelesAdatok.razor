@@ -1,0 +1,63 @@
+﻿@page "/RendelesAdatok"
+@using Vizsgafeladat.MODEL
+@using Vizsgafeladat.services
+@* @inject CartService cartService *@
+@* @inject OrderService orderService *@
+
+<h1>Checkout</h1>
+
+<div class="container my-5">
+    <h2>Kosár tartalma</h2>
+    @* <ul>
+        @foreach (var item in cartService.Cart.Items)
+        {
+            <li>@item.Product.name - Quantity: @item.Quantity - Price: @((int)(item.Product.price * item.Quantity)) Ft</li>
+        }
+    </ul>
+    <p><strong>Total: @((int)cartService.GetTotalPrice()) Ft</strong></p> *@
+</div>
+
+<div class="container my-5">
+    <h2>Adja meg az adatait:</h2>
+    <form>
+        <div class="form-group">
+            <label for="name">Név:</label>
+            <input type="text" id="name" class="form-control" @bind="customerName" required />
+        </div>
+        <div class="form-group">
+            <label for="address">Cím:</label>
+            <input type="text" id="address" class="form-control" @bind="customerAddress" required />
+        </div>
+        <div class="form-group">
+            <label for="email">Email cím:</label>
+            <input type="email" id="email" class="form-control" @bind="customerEmail" required />
+        </div>
+        <button type="button" class="btn btn-success" @onclick="PlaceOrder">Rendelés megerősítése</button>
+    </form>
+</div>
+
+@code {
+    private string? customerName;
+    private string? customerAddress;
+    private string? customerEmail;
+
+    private async Task PlaceOrder()
+    {
+        // var order = new Order
+        //     {
+        //         CustomerName = customerName,
+        //         CustomerAddress = customerAddress,
+        //         CustomerEmail = customerEmail,
+        //         Items = cartService.Cart.Items,
+        //         TotalPrice = cartService.GetTotalPrice()
+        //     };
+
+        // await orderService.SaveOrder(order);
+        // cartService.Cart.Items.Clear();
+
+        await Task.Delay(500);
+        Console.WriteLine("Order placed successfully!");
+
+        /*<a href="SikeresRendeles" class="custom-btn" "></a>*/
+    }
+}

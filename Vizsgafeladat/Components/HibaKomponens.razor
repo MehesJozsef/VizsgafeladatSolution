@@ -1,0 +1,40 @@
+﻿@rendermode InteractiveServer
+
+<div class="modal-overlay">
+    <div class="modal-box">
+        <h4>Hiba</h4>
+        <p>@Uzenet</p>
+        <button class="custom-btn" @onclick="()=>OnBejelentkezes.InvokeAsync()">Bejelentkezés most</button>
+        <button class="custom-btn" @onclick="()=>OnZaras.InvokeAsync()">Bezárás</button>
+    </div>
+</div>
+
+@code {
+    [Parameter] public string Uzenet { get; set; } = "Ismeretlen hiba történt!";
+    [Parameter] public EventCallback OnBejelentkezes { get; set; }
+    [Parameter] public EventCallback OnZaras { get; set; }
+}
+
+<style>
+    .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.6);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+    }
+
+    .modal-box {
+        background-color: #222;
+        padding: 20px;
+        border-radius: 10px;
+        color: #fff;
+        width: 300px;
+        text-align: center;
+    }
+</style>
