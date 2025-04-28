@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Win32;
-using Vizsgafeladat.MODEL;
 using CukraszdaAPI.DTO;
 using CommonLibrary.MODEL;
 

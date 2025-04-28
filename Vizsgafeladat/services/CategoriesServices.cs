@@ -1,5 +1,4 @@
 ﻿using CommonLibrary.MODEL;
-using Vizsgafeladat.MODEL;
 
 namespace Vizsgafeladat.services
 {

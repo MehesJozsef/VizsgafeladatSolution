@@ -1,6 +1,6 @@
 ﻿@page "/Fagylaltok"
 
-@using Vizsgafeladat.MODEL;
+@using CommonLibrary.MODEL
 @using Vizsgafeladat.services;
 @inject ProductServices productServices
 
@@ -47,17 +47,17 @@
 
     @if (products != null && products.Any())
     {
-        var fagylaltok = products.Where(p => p.category_id == 2).ToList();
+        var fagylaltok = products.Where(p => p.Category_id == 2).ToList();
 
         <div class="row">
             @foreach (var fagylalt in fagylaltok)
             {
                 <div class="col-md-6 menu-item">
                     <div class="menu-box">
-                        <h3>@fagylalt.name</h3>
-                        <img src="@(string.IsNullOrEmpty(fagylalt.image_url) ? "img/vanilia.jpg" : fagylalt.image_url)" alt="@fagylalt.name">
-                        <p>@fagylalt.description</p>
-                        <p class="price"><strong>Ár: @((int)fagylalt.price) Ft</strong></p>
+                        <h3>@fagylalt.Name</h3>
+                        <img src="@(string.IsNullOrEmpty(fagylalt.Image_url) ? "img/vanilia.jpg" : fagylalt.Image_url)" alt="@fagylalt.Name">
+                        <p>@fagylalt.Description</p>
+                        <p class="price"><strong>Ár: @((int)fagylalt.Price) Ft</strong></p>
                     </div>
                 </div>
             }
@@ -84,7 +84,7 @@
     }
 </script>
 @code {
-    private List<products> products;
+    private List<Product> products;
 
     protected override async Task OnInitializedAsync()
     {

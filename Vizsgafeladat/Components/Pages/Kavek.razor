@@ -1,5 +1,5 @@
 ﻿@page "/Kavek"
-@using Vizsgafeladat.MODEL;
+@using CommonLibrary.MODEL
 @using Vizsgafeladat.services;
 @inject ProductServices productServices
 
@@ -47,14 +47,14 @@
     <div class="row">
         @if (products != null && products.Any())
         {
-            @foreach (var ital in products.Where(p => p.category_id == 1))
+            @foreach (var ital in products.Where(p => p.Category_id == 1))
             {
                 <div class="col-md-6 menu-item">
                     <div class="menu-box">
-                        <h3>@ital.name</h3>
-                        <img src="@(string.IsNullOrEmpty(ital.image_url) ? "img/presso.jpg" : ital.image_url)" alt="@ital.name">
-                        <p>@ital.description</p>
-                        <p class="price"><strong>Ár: @((int)ital.price) Ft</strong></p>
+                        <h3>@ital.Name</h3>
+                        <img src="@(string.IsNullOrEmpty(ital.Image_url) ? "img/presso.jpg" : ital.Image_url)" alt="@ital.Name">
+                        <p>@ital.Description</p>
+                        <p class="price"><strong>Ár: @((int)ital.Price) Ft</strong></p>
                     </div>
                 </div>
             }
@@ -81,7 +81,7 @@
     }
 </script>
 @code {
-    private List<products> products;
+    private List<Product> products;
 
     protected override async Task OnInitializedAsync()
     {

@@ -1,5 +1,5 @@
 ﻿@page "/Tortak"
-@using Vizsgafeladat.MODEL;
+@using CommonLibrary.MODEL
 @using Vizsgafeladat.services;
 @inject ProductServices productServices
 
@@ -47,14 +47,14 @@
     <div class="row">
         @if (products != null && products.Any())
         {
-            @foreach (var torta in products.Where(p => p.category_id == 4))
+            @foreach (var torta in products.Where(p => p.Category_id == 4))
             {
                 <div class="col-md-6 menu-item">
                     <div class="menu-box">
-                        <h3>@torta.name</h3>
-                        <img src="@(string.IsNullOrEmpty(torta.image_url) ? "img/tortarajz.jfif" : torta.image_url)" alt="@torta.name">
-                        <p>@torta.description</p>
-                        <p class="price"><strong>Ár: @((int)torta.price) Ft</strong></p>
+                        <h3>@torta.Name</h3>
+                        <img src="@(string.IsNullOrEmpty(torta.Image_url) ? "img/tortarajz.jfif" : torta.Image_url)" alt="@torta.Name">
+                        <p>@torta.Description</p>
+                        <p class="price"><strong>Ár: @((int)torta.Price) Ft</strong></p>
                     </div>
                 </div>
             }
@@ -81,7 +81,7 @@
     }
 </script>
 @code {
-    private List<products> products;
+    private List<Product> products;
 
     protected override async Task OnInitializedAsync()
     {

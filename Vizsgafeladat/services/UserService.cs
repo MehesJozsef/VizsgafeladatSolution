@@ -1,5 +1,4 @@
-﻿using Vizsgafeladat.MODEL;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using CommonLibrary.MODEL;
 
 public class UserService

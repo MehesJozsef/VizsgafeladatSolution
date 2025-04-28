@@ -1,6 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using CommonLibrary.MODEL;
+using Microsoft.EntityFrameworkCore;
 using System.Net.Http.Json;
-using Vizsgafeladat.MODEL;
 
 namespace Vizsgafeladat.services
 {
@@ -13,17 +13,17 @@ namespace Vizsgafeladat.services
             _httpClient = httpClient;
         }
 
-        public async Task<List<products>> GetAllProducts()
+        public async Task<List<Product>> GetAllProducts()
         {
-            return await _httpClient.GetFromJsonAsync<List<products>>("api/Product/");
+            return await _httpClient.GetFromJsonAsync<List<Product>>("api/Product/");
         }
 
-        public async Task<products> GetProductById(int id)
+        public async Task<Product> GetProductById(int id)
         {
-            return await _httpClient.GetFromJsonAsync<products>($"api/Product/{id}");
+            return await _httpClient.GetFromJsonAsync<Product>($"api/Product/{id}");
         }
 
-        public async Task CreateProduct(products product)
+        public async Task CreateProduct(Product product)
         {
             await _httpClient.PostAsJsonAsync("api/Product", product);
         }

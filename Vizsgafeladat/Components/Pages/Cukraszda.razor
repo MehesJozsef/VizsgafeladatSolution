@@ -1,6 +1,6 @@
 ﻿@page "/"
 @rendermode InteractiveServer
-@using Vizsgafeladat.MODEL
+@using CommonLibrary.MODEL
 @using Vizsgafeladat.services
 @inject ProductServices productServices
 
@@ -26,7 +26,7 @@
         ("Italok", 1, "img/placeholder_coffee.jpg", "Kavek")
         })
             {
-                var items = products.Where(p => p.category_id == id).ToList();
+                var items = products.Where(p => p.Category_id == id).ToList();
                 <div class="col-md-6 menu-item">
                     <div class="menu-box">
                         <h3>@name</h3>
@@ -35,7 +35,7 @@
                         @if (items.Any())
                         {
                             <p>Választék: @items.Count() féle</p>
-                            <p>Árak: @((int)items.Min(p => p.price)) Ft-tól @((int)items.Max(p => p.price)) Ft-ig</p>
+                            <p>Árak: @((int)items.Min(p => p.Price)) Ft-tól @((int)items.Max(p => p.Price)) Ft-ig</p>
                         }
                         <a href="@link" class="custom-btn">Mutass többet...</a>
                     </div>
@@ -85,7 +85,7 @@
 </script>
 
 @code {
-    private List<products> products;
+    private List<Product> products;
 
     protected override async Task OnInitializedAsync()
     {

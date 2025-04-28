@@ -14,13 +14,13 @@ namespace CukraszdaAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
         {
-            return await _context.products.ToListAsync();
+            return await _context.Products.ToListAsync();
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<Product>> GetProduct(int id)
         {
-            var product = await _context.products.FindAsync(id);
+            var product = await _context.Products.FindAsync(id);
 
             if (product == null)
             {
@@ -33,7 +33,7 @@ namespace CukraszdaAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<Product>> PostProduct(Product product)
         {
-            _context.products.Add(product);
+            _context.Products.Add(product);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetProduct", new { id = product.Product_id }, product);
@@ -56,7 +56,7 @@ namespace CukraszdaAPI.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!_context.products.Any(r=> r.Product_id == id))
+                if (!_context.Products.Any(r=> r.Product_id == id))
                 {
                     return NotFound();
                 }
@@ -73,13 +73,13 @@ namespace CukraszdaAPI.Controllers
 
         public async Task<IActionResult> DeleteProduct(int id)
         {
-            var product = await _context.products.FindAsync(id);
+            var product = await _context.Products.FindAsync(id);
             if (product == null)
             {
                 return NotFound();
             }
 
-            _context.products.Remove(product);
+            _context.Products.Remove(product);
             await _context.SaveChangesAsync();
 
             return NoContent();

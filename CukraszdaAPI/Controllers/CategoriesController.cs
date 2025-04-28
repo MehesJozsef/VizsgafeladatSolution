@@ -17,13 +17,13 @@ namespace CukraszdaAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Category>>> GetCategories()
         {
-            return await _context.categories.ToListAsync();
+            return await _context.Categories.ToListAsync();
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<Category>> GetCategory(int id)
         {
-            var categories = await _context.categories.FindAsync(id);
+            var categories = await _context.Categories.FindAsync(id);
 
             if (categories == null)
             {
@@ -36,7 +36,7 @@ namespace CukraszdaAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<Product>> PostCategory(Category category)
         {
-            _context.categories.Add(category);
+            _context.Categories.Add(category);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetProduct", new { id = category.Category_id }, category);
@@ -59,7 +59,7 @@ namespace CukraszdaAPI.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!_context.categories.Any(r => r.Category_id == id))
+                if (!_context.Categories.Any(r => r.Category_id == id))
                 {
                     return NotFound();
                 }
@@ -76,13 +76,13 @@ namespace CukraszdaAPI.Controllers
 
         public async Task<IActionResult> DeleteCategory(int id)
         {
-            var category = await _context.categories.FindAsync(id);
+            var category = await _context.Categories.FindAsync(id);
             if (category == null)
             {
                 return NotFound();
             }
 
-            _context.categories.Remove(category);
+            _context.Categories.Remove(category);
             await _context.SaveChangesAsync();
 
             return NoContent();

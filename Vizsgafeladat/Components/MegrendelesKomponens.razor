@@ -1,6 +1,6 @@
 ﻿@* @page "/Rendeles" *@
+@using CommonLibrary.MODEL
 @using Vizsgafeladat.VIEWMODEL
-@using Vizsgafeladat.MODEL
 @using Vizsgafeladat.services
 
 @inject ProductServices productServices
@@ -52,14 +52,14 @@
     <div class="row">
         @if (products != null && products.Any())
         {
-            @foreach (var torta in products.Where(p => p.category_id == 4))
+            @foreach (var torta in products.Where(p => p.Category_id == 4))
             {
                 <div class="col-md-6 menu-item">
                     <div class="menu-box">
-                        <h3>@torta.name</h3>
-                        <img src="@(string.IsNullOrEmpty(torta.image_url) ? "img/default.jpg" : torta.image_url)" alt="@torta.name">
-                        <p>@torta.description</p>
-                        <p class="price"><strong>Ár: @((int)torta.price) Ft</strong></p>
+                        <h3>@torta.Name</h3>
+                        <img src="@(string.IsNullOrEmpty(torta.Image_url) ? "img/default.jpg" : torta.Image_url)" alt="@torta.Name">
+                        <p>@torta.Description</p>
+                        <p class="price"><strong>Ár: @((int)torta.Price) Ft</strong></p>
                     </div>
                 </div>
             }
@@ -79,14 +79,14 @@
     <div class="row">
         @if (products != null && products.Any())
         {
-            @foreach (var sutemeny in products.Where(p => p.category_id == 3))
+            @foreach (var sutemeny in products.Where(p => p.Category_id == 3))
             {
                 <div class="col-md-6 menu-item">
                     <div class="menu-box">
-                        <h3>@sutemeny.name</h3>
-                        <img src="@(string.IsNullOrEmpty(sutemeny.image_url) ? "img/default.jpg" : sutemeny.image_url)" alt="@sutemeny.name">
-                        <p>@sutemeny.description</p>
-                        <p class="price"><strong>Ár: @((int)sutemeny.price) Ft</strong></p>
+                        <h3>@sutemeny.Name</h3>
+                        <img src="@(string.IsNullOrEmpty(sutemeny.Image_url) ? "img/default.jpg" : sutemeny.Image_url)" alt="@sutemeny.Name">
+                        <p>@sutemeny.Description</p>
+                        <p class="price"><strong>Ár: @((int)sutemeny.Price) Ft</strong></p>
                     </div>
                 </div>
             }
@@ -106,14 +106,14 @@
     <div class="row">
         @if (products != null && products.Any())
         {
-            @foreach (var fagylalt in products.Where(p => p.category_id == 2))
+            @foreach (var fagylalt in products.Where(p => p.Category_id == 2))
             {
                 <div class="col-md-6 menu-item">
                     <div class="menu-box">
-                        <h3>@fagylalt.name</h3>
-                        <img src="@(string.IsNullOrEmpty(fagylalt.image_url) ? "img/default.jpg" : fagylalt.image_url)" alt="@fagylalt.name">
-                        <p>@fagylalt.description</p>
-                        <p class="price"><strong>Ár: @((int)fagylalt.price) Ft</strong></p>
+                        <h3>@fagylalt.Name</h3>
+                        <img src="@(string.IsNullOrEmpty(fagylalt.Image_url) ? "img/default.jpg" : fagylalt.Image_url)" alt="@fagylalt.Name">
+                        <p>@fagylalt.Description</p>
+                        <p class="price"><strong>Ár: @((int)fagylalt.Price) Ft</strong></p>
                     </div>
                 </div>
             }
@@ -133,14 +133,14 @@
     <div class="row">
         @if (products != null && products.Any())
         {
-            @foreach (var ital in products.Where(p => p.category_id == 1))
+            @foreach (var ital in products.Where(p => p.Category_id == 1))
             {
                 <div class="col-md-6 menu-item">
                     <div class="menu-box">
-                        <h3>@ital.name</h3>
-                        <img src="@(string.IsNullOrEmpty(ital.image_url) ? "img/presso.jpg" : ital.image_url)" alt="@ital.name">
-                        <p>@ital.description</p>
-                        <p class="price"><strong>Ár: @((int)ital.price) Ft</strong></p>
+                        <h3>@ital.Name</h3>
+                        <img src="@(string.IsNullOrEmpty(ital.Image_url) ? "img/presso.jpg" : ital.Image_url)" alt="@ital.Name">
+                        <p>@ital.Description</p>
+                        <p class="price"><strong>Ár: @((int)ital.Price) Ft</strong></p>
                     </div>
                 </div>
             }
@@ -177,7 +177,7 @@
 </script>
 
 @code {
-    private List<products> products;
+    private List<Product> products;
 
     protected override async Task OnInitializedAsync()
     {

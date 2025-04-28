@@ -45,7 +45,8 @@
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                     <li><a class="dropdown-item" href="/Profile">Profilom</a></li>
                     <li><hr class="dropdown-divider"></li>
-                    <li><button class="dropdown-item" @onclick="Logout">Kijelentkezés</button></li>
+                    @* <li><button class="dropdown-item" @onclick="Logout">Kijelentkezés</button></li> *@
+                    <li><button class="dropdown-item" @onclick="Logout" @onclick:preventDefault="true">Kijelentkezés</button></li>
                 </ul>
             </div>
         }
@@ -60,6 +61,7 @@
     private void Logout()
     {
         UserSession.CurrentUser = null;
+        StateHasChanged();   // ← fontos, hogy frissüljön a menü!
         navigate.NavigateTo("/");
     }
 }

@@ -1,13 +1,17 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-
 namespace CommonLibrary.MODEL
 {
     public class ProductDbContext : DbContext
     {
-        public DbSet<Category> categories { get; set; }
-        public DbSet<Order> Orders { get; set; }
-        public DbSet<Product> products { get; set; }
+        // Termékek
+        public DbSet<Category> Categories { get; set; }
+        public DbSet<Product> Products { get; set; }
+
+        // Új kosár / rendelés kezelés
+        public DbSet<OrderHead> OrderHeads { get; set; }
+        public DbSet<OrderItem> OrderItems { get; set; }
+        public DbSet<Status> Statuses { get; set; }
 
         // Bejelentkezés - regisztráció
         public DbSet<User> Users { get; set; }
