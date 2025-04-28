@@ -6,6 +6,71 @@
 @inject CartService cartService
 @inject NavigationManager NavigationManager
 
+<style>
+    .menu-box .card {
+        height: 480px; /* Szebb kártyamagasság */
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 15px;
+        background-color: #ffffff; /* Fehér háttér */
+        border: 1px solid #e0e0e0; /* Finom szürke keret */
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Finom árnyék */
+    }
+
+        .menu-box .card img {
+            max-height: 160px;
+            object-fit: contain;
+            margin-bottom: 10px;
+        }
+
+    .menu-box .card-body {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    h5.card-title {
+        color: #ffcc00; /* Vidám sárga */
+        font-weight: bold;
+        font-size: 1.2rem;
+        margin-bottom: 10px;
+    }
+
+    .description {
+        color: #333333; /* Barátságos sötétszürke */
+        font-size: 0.95rem;
+        margin-bottom: 10px;
+    }
+
+    .price {
+        color: #ffcc00; /* Ugyanaz a vidám sárga mint a cím */
+        font-weight: bold;
+        font-size: 1.1rem;
+        margin-bottom: 10px;
+    }
+
+    .quantity-input {
+        width: 60px;
+        margin: 0 auto 10px auto; /* Középen, alatta kis hely */
+        text-align: center;
+    }
+
+    .btn-primary {
+        width: 100%;
+    }
+
+    .menu-item {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 30px;
+    }
+</style>
+
+
 <div class="container mt-5">
     <nav class="navbar navbar-expand-lg mb-5">
         <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
@@ -17,7 +82,6 @@
         </div>
     </nav>
 
-    @* Termékkategóriák megjelenítése *@
     @if (products != null && products.Any())
     {
         <div class="text-center mb-5">
@@ -99,6 +163,7 @@
 
 @code {
     private List<Product> products = new();
+    private Dictionary<int, int> quantities = new(); // productId -> db szám
 
     protected override async Task OnInitializedAsync()
     {
@@ -107,6 +172,8 @@
 
     private void AddToCart(Product product)
     {
+        int quantity = quantities.ContainsKey(product.Product_id) ? quantities[product.Product_id] : 1;
+
         var productEntity = new Product
             {
                 Product_id = product.Product_id,
@@ -117,7 +184,7 @@
                 Image_url = product.Image_url
             };
 
-        cartService.AddToCart(productEntity, 1);
+        cartService.AddToCart(productEntity, quantity);
     }
 
     private async Task SaveOrder()
@@ -126,7 +193,7 @@
         if (orderId > 0)
         {
             await Task.Delay(200);
-            NavigationManager.NavigateTo("/rendeles-siker"); // majd csinálunk egy egyszerű siker oldalt
+            NavigationManager.NavigateTo("/rendeles-siker");
         }
         else
         {
@@ -136,11 +203,10 @@
 
     private RenderFragment ProductCard(Product product) => __builder =>
     {
-        // Felépítünk dinamikusan egy html oldalt.
         __builder.OpenElement(0, "div");
-        __builder.AddAttribute(1, "class", "col-md-6 mb-4"); // Fél szélességű (6-os oszlop), margóval
+        __builder.AddAttribute(1, "class", "col-md-3 menu-item"); // 4 kártya / sor
         __builder.OpenElement(2, "div");
-        __builder.AddAttribute(3, "class", "card shadow-sm");
+        __builder.AddAttribute(3, "class", "card shadow-sm menu-box");
         __builder.OpenElement(4, "div");
         __builder.AddAttribute(5, "class", "card-body text-center");
 
@@ -155,21 +221,31 @@
         __builder.CloseElement(); // img
 
         __builder.OpenElement(12, "p");
-        __builder.AddContent(13, product.Description);
+        __builder.AddAttribute(13, "class", "card-text");
+        __builder.AddContent(14, product.Description);
         __builder.CloseElement(); // p
 
-        __builder.OpenElement(14, "p");
-        __builder.AddContent(15, $"Ár: {(int)(product.Price ?? 0)} Ft");
+        __builder.OpenElement(15, "p");
+        __builder.AddAttribute(16, "class", "price");
+        __builder.AddContent(17, $"Ár: {(int)(product.Price ?? 0)} Ft");
         __builder.CloseElement(); // p
 
-        __builder.OpenElement(16, "button");
-        __builder.AddAttribute(17, "class", "btn btn-primary");
-        __builder.AddAttribute(18, "onclick", EventCallback.Factory.Create(this, () => AddToCart(product)));
-        __builder.AddContent(19, "Kosárba");
+        __builder.OpenElement(18, "input");
+        __builder.AddAttribute(19, "type", "number");
+        __builder.AddAttribute(20, "min", "1");
+        __builder.AddAttribute(21, "value", BindConverter.FormatValue(quantities.ContainsKey(product.Product_id) ? quantities[product.Product_id] : 1));
+        __builder.AddAttribute(22, "class", "form-control quantity-input");
+        __builder.AddAttribute(23, "onchange", EventCallback.Factory.CreateBinder<int>(this, value => quantities[product.Product_id] = value, quantities.ContainsKey(product.Product_id) ? quantities[product.Product_id] : 1));
+        __builder.CloseElement(); // input
+
+        __builder.OpenElement(24, "button");
+        __builder.AddAttribute(25, "class", "btn btn-primary btn-cart");
+        __builder.AddAttribute(26, "onclick", EventCallback.Factory.Create(this, () => AddToCart(product)));
+        __builder.AddContent(27, "Kosárba");
         __builder.CloseElement(); // button
 
         __builder.CloseElement(); // card-body
         __builder.CloseElement(); // card
-        __builder.CloseElement(); // col-md-6
+        __builder.CloseElement(); // col-md-3
     };
 }
